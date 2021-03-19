@@ -73,7 +73,6 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_month.geo
             return L.circleMarker(latlng);
         },
         style: styleInfo,
-
         onEachFeature: function(feature, layer) {
             layer.bindPopup(
                 "Magnitude: "
@@ -104,9 +103,9 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_month.geo
             "#ca3000"
         ];
 
-        for (var i = 0; i < grades.length; i++) {
-            div.innerHTML += "<i style='background: " + colors[i] + "'></i> "
-            + grades[i] + (grades[i + 1] ? "&ndash;" + grades[i + 1] + "<br>" : "+");
+        for (var input = 0; input < grades.length; input++) {
+            div.innerHTML += "<input style='background: " + colors[input] + "'></input> "
+            + grades[input] + (grades[input + 1] ? "&ndash;" + grades[input + 1] + "<br>" : "+");
         }
         return div;
     };

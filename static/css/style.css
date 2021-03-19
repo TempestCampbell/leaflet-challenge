@@ -15,7 +15,7 @@ body,
   border-radius: 5px;
 }
 ​
-.legend i {
+.legend input {
   float: left;
   width: 18px;
   height: 18px;
