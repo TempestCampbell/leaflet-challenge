@@ -11,7 +11,7 @@ var grayMap= L.tileLayer(
     }
 );
 
-var mapUS = L.map("map-id", {
+var mapUS = L.mapUS("map-id", {
     center: [
         40, -95
 
@@ -23,10 +23,10 @@ var mapUS = L.map("map-id", {
 grayMap.addTo(mapUS);
 
 //earthquake geoJSON data
-d3.json(https:"//earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_month.geojson", function(data){
+d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_month.geojson", function(data){
 
 //Functions to find color and radius
-function styleInfo(feature){
+function styleInfo(feature) {
     return {
         opacity: 1,
         fillOpacity:1,
@@ -41,30 +41,61 @@ function styleInfo(feature){
 
 // #00893d, #cfe600, #e8d800, #fdba00, #ec8600, #eb5500, #d31100
 // #008026, #ff5d45, #feb482, #ffe97a, #e5ff78, #b2ff65, #59ff3e
-function getColor(depth){
-    switch(true) {
-    case depth > 90:
-        return "#ca3000";
-    case depth > 70:
-        return "#ff4c02";
-    case depth > 50:
-        return "#ff8237";
-    case depth > 30:
-        return "#ffd081";
-    case depth > 10:
-        return "#fdffa7";
-    default:
-        return "#b1fe7e";
+    function getColor(depth){
+        switch(true) {
+        case depth > 90:
+            return "#ca3000";
+        case depth > 70:
+            return "#ff4c02";
+        case depth > 50:
+            return "#ff8237";
+        case depth > 30:
+            return "#ffd081";
+        case depth > 10:
+            return "#fdffa7";
+        default:
+            return "#b1fe7e";
+        }
     }
-}
+
+//Function for figure out redius of the marker for the magnitude of the earthquake
+    function getRadius(magnitude){
+        if (magnitude === 0) {
+            return 1;
+        }
+        return magnitude *4 ;
+    }
+
+//geoJSON Layer
+
+    L.geoJSON(data, {
+        Layer: function(feature, latlng){
+            return L.cirleMarker(latlng);
+        },
+        style: styleInfo,
+
+        onEachFeature: function(feature, layer) {
+            layer.bindPopup(
+                "Magnitude"
+                + feature.properties.mag
+                +"<br>Depth"
+                +feature.geometry.coordinate[2]
+                +"<br>Location"
+                +features.properties.place
+            );
+        }
+    }).addTo(mapUS);
 
 
-}
 
 
 
 
 
 
+
+
+
+    }
 
 })
