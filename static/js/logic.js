@@ -11,7 +11,7 @@ var grayMap= L.tileLayer(
     }
 );
 
-var mapUS = L.mapUS("map-id", {
+var mapUS = L.map("mapid", {
     center: [
         40, -95
 
@@ -26,16 +26,17 @@ grayMap.addTo(mapUS);
 d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_month.geojson", function(data){
 
 //Functions to find color and radius
-function styleInfo(feature) {
-    return {
-        opacity: 1,
-        fillOpacity:1,
-        fillColor: getColor(feature.geometry.coordinates[2]),
-        color:"#000000",
-        radius:getRadius(feature.properties.mag),
-        stroke:true,
-        weight:0.5
-    };
+    function styleInfo(feature) {
+        return {
+            opacity: 1,
+            fillOpacity:1,
+            fillColor: getColor(feature.geometry.coordinates[2]),
+            color:"#000000",
+            radius:getRadius(feature.properties.mag),
+            stroke:true,
+            weight:0.5
+        };
+    }
 //Function to find color of marker depending on the size of the earthquake (red=large into green=small)
 
 
@@ -67,10 +68,9 @@ function styleInfo(feature) {
     }
 
 //geoJSON Layer
-
     L.geoJSON(data, {
-        Layer: function(feature, latlng){
-            return L.cirleMarker(latlng);
+        pointToLayer: function(feature, latlng){
+            return L.circleMarker(latlng);
         },
         style: styleInfo,
 
@@ -79,23 +79,37 @@ function styleInfo(feature) {
                 "Magnitude"
                 + feature.properties.mag
                 +"<br>Depth"
-                +feature.geometry.coordinate[2]
+                +feature.geometry.coordinates[2]
                 +"<br>Location"
-                +features.properties.place
+                +feature.properties.place
             );
         }
     }).addTo(mapUS);
 
+    //Create Legend
+    var legend = L.control({
+        position: "bottomright"
+      });
 
-
-
-
-
-
-
-
-
-
-    }
-
-})
+      legend.onAdd = function() {
+        var div = L.DomUtil.create("div", "info legend");
+    
+        var grades = [-10, 10, 30, 50, 70, 90];
+        var colors = ["#b1fe7e", 
+            "#fdffa7", 
+            "#ffd081", 
+            "#ff8237", 
+            "#ff4c02", 
+            "#ca3000"
+        ];
+    
+        for (var i = 0; i < grades.length; i++) {
+            div.innerHTML += "<i style='background: " + colors[i] + "'></i> "
+            + grades[i] + (grades[i + 1] ? "&ndash;" + grades[i + 1] + "<br>" : "+");
+        }
+        return div;
+        };
+  
+    //Add legend to map
+    legend.addTo(mapUS);
+});
