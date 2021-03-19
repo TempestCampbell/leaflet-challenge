@@ -1,13 +1,13 @@
 var grayMap= L.tileLayer(
     "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}",
     {
-      attribution:
-        "© <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>",
-      tileSize: 512,
-      maxZoom: 18,
-      zoomOffset: -1,
-      id: "mapbox/light-v10",
-      accessToken: API_KEY
+        attribution:
+            "© <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>",
+        tileSize: 512,
+        maxZoom: 18,
+        zoomOffset: -1,
+        id: "mapbox/light-v10",
+        accessToken: API_KEY
     }
 );
 
@@ -76,12 +76,12 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_month.geo
 
         onEachFeature: function(feature, layer) {
             layer.bindPopup(
-                "Magnitude"
+                "Magnitude: "
                 + feature.properties.mag
-                +"<br>Depth"
-                +feature.geometry.coordinates[2]
-                +"<br>Location"
-                +feature.properties.place
+                + "<br> Depth: "
+                + feature.geometry.coordinates[2]
+                + "<br> Location: "
+                + feature.properties.place
             );
         }
     }).addTo(mapUS);
@@ -89,27 +89,27 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_month.geo
     //Create Legend
     var legend = L.control({
         position: "bottomright"
-      });
+    });
 
-      legend.onAdd = function() {
+    legend.onAdd = function() {
         var div = L.DomUtil.create("div", "info legend");
-    
+
         var grades = [-10, 10, 30, 50, 70, 90];
-        var colors = ["#b1fe7e", 
+        var colors = [
+            "#b1fe7e", 
             "#fdffa7", 
             "#ffd081", 
             "#ff8237", 
             "#ff4c02", 
             "#ca3000"
         ];
-    
+
         for (var i = 0; i < grades.length; i++) {
             div.innerHTML += "<i style='background: " + colors[i] + "'></i> "
             + grades[i] + (grades[i + 1] ? "&ndash;" + grades[i + 1] + "<br>" : "+");
         }
         return div;
-        };
-  
+    };
     //Add legend to map
     legend.addTo(mapUS);
 });
